@@ -45,8 +45,8 @@ class _TvWebViewScreenState extends State<TvWebViewScreen> {
         widget.params ?? context.getScreenParamsOf<TvWebViewScreenParams>();
     _params = retrievedParams ??
         const TvWebViewScreenParams(
-          title: 'Web View',
-          url: 'https://flutter.dev',
+          title: '',
+          url: '',
         );
 
     _viewModel.initializeController(_params.url);

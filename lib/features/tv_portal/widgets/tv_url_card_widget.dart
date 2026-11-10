@@ -177,15 +177,17 @@ class _TvUrlCardWidgetState extends State<TvUrlCardWidget> {
                           ],
                         ],
                       ),
-                      SizedBox(height: 6.spMin),
-                      Text(
-                        widget.item.displayDescription,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: tsS14W400.copyWith(
-                          color: brand.textMediumGray,
+                      if (widget.item.displayDescription.isNotEmpty) ...[
+                        SizedBox(height: 6.spMin),
+                        Text(
+                          widget.item.displayDescription,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: tsS14W400.copyWith(
+                            color: brand.textMediumGray,
+                          ),
                         ),
-                      ),
+                      ],
                       SizedBox(height: 6.spMin),
                       Text(
                         widget.item.displayUrl,

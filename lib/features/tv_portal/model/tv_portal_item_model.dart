@@ -96,7 +96,7 @@ class TvPortalItemModel {
     if (notes != null && notes!.trim().isNotEmpty) {
       return notes!.trim();
     }
-    return 'Smart TV Web Portal Link';
+    return '';
   }
 
   factory TvPortalItemModel.fromJson(Map<String, dynamic> json) =>
