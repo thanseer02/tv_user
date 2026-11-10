@@ -17,7 +17,7 @@ extension SampleProfileRepo on WebAPIService {
       methodToCall: initTokenToHeader().then(
         (value) => initLangPrefToHeader().then(
           (value) => initTenantPrefToHeader().then(
-            (value) => dio.get('$urlRegistration/$userId'),
+            (value) => dio.get(urlPublicTvUrls),
           ),
         ),
       ),
