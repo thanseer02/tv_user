@@ -1,0 +1,16 @@
+{
+  "@@locale": "en",
+  "hello": "Hello",
+  "appTitle": "Smart TV Portal",
+  "splashLoading": "Initializing TV Experience...",
+  "urlListingTitle": "Select Portal / Stream",
+  "urlListingSubtitle": "Use your remote D-Pad (Up / Down / Enter) to select a link",
+  "emptyUrlList": "No URLs found",
+  "openUrl": "Open",
+  "backToUrls": "Back to List",
+  "webViewTitle": "Web View Portal",
+  "webViewLoading": "Loading content...",
+  "reload": "Reload",
+  "exit": "Exit",
+  "remoteHelp": "Remote Control: Use Arrow Keys / D-Pad to Navigate • Enter / OK to Select"
+}

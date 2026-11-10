@@ -1,0 +1,16 @@
+{
+  "@@locale": "ja",
+  "hello": "こんにちは",
+  "appTitle": "スマートTVポータル",
+  "splashLoading": "TV環境を初期化中...",
+  "urlListingTitle": "ポータル / リンクを選択",
+  "urlListingSubtitle": "リモコンの十字キー(上下/決定)で選択してください",
+  "emptyUrlList": "URLが見つかりません",
+  "openUrl": "開く",
+  "backToUrls": "一覧に戻る",
+  "webViewTitle": "Webポータル",
+  "webViewLoading": "コンテンツを読み込み中...",
+  "reload": "再読み込み",
+  "exit": "終了",
+  "remoteHelp": "リモコン: 矢印キーで移動 • 決定キーで選択"
+}
