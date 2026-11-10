@@ -17,10 +17,11 @@ class TvWebViewViewModel extends ViewModel {
 
   void initializeController(String initialUrl) {
     _currentUrl = initialUrl;
+
     if (kIsWeb) {
-      // webview_flutter_web works with standard WebViewController
+      // On Flutter Web, JavaScript mode is controlled by the browser/iframe environment.
+      // Calling setJavaScriptMode throws UnimplementedError on web platform.
       final controller = WebViewController()
-        ..setJavaScriptMode(JavaScriptMode.unrestricted)
         ..loadRequest(Uri.parse(initialUrl));
       _webViewController = controller;
       _isPageLoading = false;
@@ -59,7 +60,12 @@ class TvWebViewViewModel extends ViewModel {
   }
 
   void reload() {
-    _webViewController?.reload();
+    if (_currentUrl != null && _currentUrl!.isNotEmpty) {
+      if (kIsWeb) {
+        _webViewController?.loadRequest(Uri.parse(_currentUrl!));
+      } else {
+        _webViewController?.reload();
+      }
+    }
   }
 }
-
