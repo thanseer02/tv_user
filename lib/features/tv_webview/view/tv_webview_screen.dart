@@ -32,13 +32,13 @@ class TvWebViewScreen extends StatefulWidget {
 class _TvWebViewScreenState extends State<TvWebViewScreen> {
   late final TvWebViewViewModel _viewModel;
   late final TvWebViewScreenParams _params;
+  final FocusNode _remoteFocusNode = FocusNode(debugLabel: 'TvWebViewRemoteControl');
 
   @override
   void initState() {
     super.initState();
     _viewModel = TvWebViewViewModel();
 
-    // Enable true full-screen mode on native platforms (Android TV)
     if (!kIsWeb) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     }
@@ -60,10 +60,10 @@ class _TvWebViewScreenState extends State<TvWebViewScreen> {
 
   @override
   void dispose() {
-    // Restore edge-to-edge / system overlays when leaving the full-screen webview
     if (!kIsWeb) {
       SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     }
+    _remoteFocusNode.dispose();
     _viewModel.dispose();
     super.dispose();
   }
@@ -74,95 +74,150 @@ class _TvWebViewScreenState extends State<TvWebViewScreen> {
 
     return ChangeNotifierProvider.value(
       value: _viewModel,
-      child: Shortcuts(
-        shortcuts: <LogicalKeySet, Intent>{
-          LogicalKeySet(LogicalKeyboardKey.escape): const DismissIntent(),
-          LogicalKeySet(LogicalKeyboardKey.backspace): const DismissIntent(),
-          LogicalKeySet(LogicalKeyboardKey.select): const ActivateIntent(),
-          LogicalKeySet(LogicalKeyboardKey.enter): const ActivateIntent(),
-        },
-        child: Actions(
-          actions: <Type, Action<Intent>>{
-            DismissIntent: CallbackAction<DismissIntent>(
-              onInvoke: (intent) => Navigator.of(context).maybePop(),
-            ),
-          },
-          child: Scaffold(
-            backgroundColor: brand.bgDeepNavy,
-            body: Stack(
-              children: [
-                // Edge-to-edge full screen webview
-                const Positioned.fill(
-                  child: TvWebViewContainerWidget(),
-                ),
+      child: Focus(
+        focusNode: _remoteFocusNode,
+        autofocus: true,
+        onKeyEvent: (node, event) {
+          if (event is KeyDownEvent) {
+            final key = event.logicalKey;
 
-                // Floating minimal translucent TV overlay button to return to URL list
-                Positioned(
-                  top: 16.spMin,
-                  left: 16.spMin,
-                  child: FocusableActionDetector(
-                    autofocus: false,
-                    actions: <Type, Action<Intent>>{
-                      ActivateIntent: CallbackAction<ActivateIntent>(
-                        onInvoke: (intent) {
-                          Navigator.of(context).maybePop();
-                          return null;
-                        },
+            // Remote Back / Esc / Backspace
+            if (key == LogicalKeyboardKey.escape ||
+                key == LogicalKeyboardKey.backspace ||
+                key == LogicalKeyboardKey.goBack) {
+              Navigator.of(context).maybePop();
+              return KeyEventResult.handled;
+            }
+
+            // D-Pad Up: Scroll page up
+            if (key == LogicalKeyboardKey.arrowUp) {
+              _viewModel.scrollUp();
+              return KeyEventResult.handled;
+            }
+
+            // D-Pad Down: Scroll page down
+            if (key == LogicalKeyboardKey.arrowDown) {
+              _viewModel.scrollDown();
+              return KeyEventResult.handled;
+            }
+
+            // D-Pad Left: Scroll page left
+            if (key == LogicalKeyboardKey.arrowLeft) {
+              _viewModel.scrollLeft();
+              return KeyEventResult.handled;
+            }
+
+            // D-Pad Right: Scroll page right
+            if (key == LogicalKeyboardKey.arrowRight) {
+              _viewModel.scrollRight();
+              return KeyEventResult.handled;
+            }
+
+            // D-Pad Center / Enter / Select: Trigger action on focused element
+            if (key == LogicalKeyboardKey.select ||
+                key == LogicalKeyboardKey.enter ||
+                key == LogicalKeyboardKey.numpadEnter ||
+                key == LogicalKeyboardKey.gameButtonA) {
+              _viewModel.simulateClick();
+              return KeyEventResult.handled;
+            }
+          }
+          return KeyEventResult.ignored;
+        },
+        child: Scaffold(
+          backgroundColor: brand.bgDeepNavy,
+          body: Stack(
+            children: [
+              // Edge-to-edge full screen webview
+              const Positioned.fill(
+                child: TvWebViewContainerWidget(),
+              ),
+
+              // Floating minimal translucent TV overlay button to return to URL list
+              Positioned(
+                top: 20.spMin,
+                left: 20.spMin,
+                child: GestureDetector(
+                  onTap: () => Navigator.of(context).maybePop(),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.spMin,
+                      vertical: 10.spMin,
+                    ),
+                    decoration: BoxDecoration(
+                      color: brand.bgDarkNavy.withValues(alpha: 0.85),
+                      borderRadius: BorderRadius.circular(24.spMin),
+                      border: Border.all(
+                        color: brand.primaryBlue.withValues(alpha: 0.6),
+                        width: 1.5.spMin,
                       ),
-                    },
-                    child: Builder(
-                      builder: (detectorContext) {
-                        return GestureDetector(
-                          onTap: () => Navigator.of(context).maybePop(),
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 14.spMin,
-                              vertical: 8.spMin,
-                            ),
-                            decoration: BoxDecoration(
-                              color: brand.bgDarkNavy.withValues(alpha: 0.85),
-                              borderRadius: BorderRadius.circular(24.spMin),
-                              border: Border.all(
-                                color: brand.primaryBlue.withValues(alpha: 0.6),
-                                width: 1.5.spMin,
-                              ),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withValues(alpha: 0.5),
-                                  blurRadius: 10.spMin,
-                                  offset: Offset(0, 4.spMin),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(
-                                  Icons.arrow_back_rounded,
-                                  size: 18.spMin,
-                                  color: brand.textWhite,
-                                ),
-                                SizedBox(width: 8.spMin),
-                                Text(
-                                  _params.title.isNotEmpty
-                                      ? _params.title
-                                      : 'Back',
-                                  style: TextStyle(
-                                    fontSize: 13.spMin,
-                                    color: brand.textWhite,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.5),
+                          blurRadius: 10.spMin,
+                          offset: Offset(0, 4.spMin),
+                        ),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.arrow_back_rounded,
+                          size: 20.spMin,
+                          color: brand.textWhite,
+                        ),
+                        SizedBox(width: 8.spMin),
+                        Text(
+                          _params.title.isNotEmpty ? _params.title : 'Back',
+                          style: TextStyle(
+                            fontSize: 14.spMin,
+                            color: brand.textWhite,
+                            fontWeight: FontWeight.w600,
                           ),
-                        );
-                      },
+                        ),
+                      ],
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+
+              // Floating bottom helper pill showing D-Pad remote controls
+              Positioned(
+                bottom: 16.spMin,
+                right: 20.spMin,
+                child: Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 14.spMin,
+                    vertical: 8.spMin,
+                  ),
+                  decoration: BoxDecoration(
+                    color: brand.bgDarkNavy.withValues(alpha: 0.75),
+                    borderRadius: BorderRadius.circular(20.spMin),
+                    border: Border.all(color: brand.tuna, width: 1.spMin),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        Icons.swap_vert_rounded,
+                        size: 18.spMin,
+                        color: brand.primaryBlue,
+                      ),
+                      SizedBox(width: 6.spMin),
+                      Text(
+                        'D-Pad: Scroll Up / Down • Center: Select • Back: Exit',
+                        style: TextStyle(
+                          fontSize: 12.spMin,
+                          color: brand.textMediumGray,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

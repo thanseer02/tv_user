@@ -19,8 +19,6 @@ class TvWebViewViewModel extends ViewModel {
     _currentUrl = initialUrl;
 
     if (kIsWeb) {
-      // On Flutter Web, JavaScript mode is controlled by the browser/iframe environment.
-      // Calling setJavaScriptMode throws UnimplementedError on web platform.
       final controller = WebViewController()
         ..loadRequest(Uri.parse(initialUrl));
       _webViewController = controller;
@@ -57,6 +55,43 @@ class TvWebViewViewModel extends ViewModel {
 
     _webViewController = controller;
     notifyListeners();
+  }
+
+  /// Scrolls the webpage up using the TV remote D-Pad Up
+  void scrollUp([int pixels = 180]) {
+    _webViewController?.runJavaScript(
+      'window.scrollBy({top: -$pixels, behavior: "smooth"});',
+    );
+  }
+
+  /// Scrolls the webpage down using the TV remote D-Pad Down
+  void scrollDown([int pixels = 180]) {
+    _webViewController?.runJavaScript(
+      'window.scrollBy({top: $pixels, behavior: "smooth"});',
+    );
+  }
+
+  /// Scrolls the webpage left using the TV remote D-Pad Left
+  void scrollLeft([int pixels = 150]) {
+    _webViewController?.runJavaScript(
+      'window.scrollBy({left: -$pixels, behavior: "smooth"});',
+    );
+  }
+
+  /// Scrolls the webpage right using the TV remote D-Pad Right
+  void scrollRight([int pixels = 150]) {
+    _webViewController?.runJavaScript(
+      'window.scrollBy({left: $pixels, behavior: "smooth"});',
+    );
+  }
+
+  /// Simulates clicking the currently focused web element or triggers page interaction
+  void simulateClick() {
+    _webViewController?.runJavaScript('''
+      if (document.activeElement && typeof document.activeElement.click === "function") {
+        document.activeElement.click();
+      }
+    ''');
   }
 
   void reload() {
