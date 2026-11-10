@@ -2,11 +2,13 @@ import 'package:base_project/features/tv_portal/model/tv_portal_item_model.dart'
 import 'package:base_project/utils/brand_colors.dart';
 import 'package:base_project/utils/styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TvUrlCardWidget extends StatefulWidget {
   final TvPortalItemModel item;
   final bool isSelected;
+  final bool autoFocus;
   final VoidCallback onTap;
   final ValueChanged<bool>? onFocusChanged;
 
@@ -14,6 +16,7 @@ class TvUrlCardWidget extends StatefulWidget {
     super.key,
     required this.item,
     required this.isSelected,
+    this.autoFocus = false,
     required this.onTap,
     this.onFocusChanged,
   });
@@ -23,7 +26,31 @@ class TvUrlCardWidget extends StatefulWidget {
 }
 
 class _TvUrlCardWidgetState extends State<TvUrlCardWidget> {
+  late final FocusNode _focusNode;
   bool _isFocused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _focusNode = FocusNode(debugLabel: 'TvUrlCard_${widget.item.id}');
+    _focusNode.addListener(_onFocusNodeChanged);
+  }
+
+  void _onFocusNodeChanged() {
+    if (mounted && _isFocused != _focusNode.hasFocus) {
+      setState(() {
+        _isFocused = _focusNode.hasFocus;
+      });
+      widget.onFocusChanged?.call(_focusNode.hasFocus);
+    }
+  }
+
+  @override
+  void dispose() {
+    _focusNode.removeListener(_onFocusNodeChanged);
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   IconData _getIconData(String? category, String? iconName) {
     if (iconName != null) {
@@ -65,37 +92,33 @@ class _TvUrlCardWidgetState extends State<TvUrlCardWidget> {
     final brand = context.brand;
     final bool highlighted = _isFocused || widget.isSelected;
 
-    return FocusableActionDetector(
-      onShowFocusHighlight: (hasHighlight) {
-        if (mounted && _isFocused != hasHighlight) {
-          setState(() {
-            _isFocused = hasHighlight;
-          });
-          widget.onFocusChanged?.call(hasHighlight);
-        }
-      },
-      onFocusChange: (hasKeyboardFocus) {
-        if (mounted && _isFocused != hasKeyboardFocus) {
-          setState(() {
-            _isFocused = hasKeyboardFocus;
-          });
-          widget.onFocusChanged?.call(hasKeyboardFocus);
-        }
-      },
-      actions: <Type, Action<Intent>>{
-        ActivateIntent: CallbackAction<ActivateIntent>(
-          onInvoke: (intent) {
+    return Focus(
+      focusNode: _focusNode,
+      autofocus: widget.autoFocus,
+      onKeyEvent: (node, event) {
+        if (event is KeyDownEvent) {
+          final logicalKey = event.logicalKey;
+          // Android TV D-Pad Center, Enter, Space, NumpadEnter, MediaSelect
+          if (logicalKey == LogicalKeyboardKey.select ||
+              logicalKey == LogicalKeyboardKey.enter ||
+              logicalKey == LogicalKeyboardKey.numpadEnter ||
+              logicalKey == LogicalKeyboardKey.gameButtonA ||
+              logicalKey == LogicalKeyboardKey.space) {
             widget.onTap();
-            return null;
-          },
-        ),
+            return KeyEventResult.handled;
+          }
+        }
+        return KeyEventResult.ignored;
       },
       child: AnimatedScale(
         scale: highlighted ? 1.05 : 1.0,
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeOutCubic,
         child: GestureDetector(
-          onTap: widget.onTap,
+          onTap: () {
+            _focusNode.requestFocus();
+            widget.onTap();
+          },
           behavior: HitTestBehavior.opaque,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),

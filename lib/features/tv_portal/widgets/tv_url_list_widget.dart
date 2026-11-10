@@ -45,42 +45,46 @@ class TvUrlListWidget extends StatelessWidget {
             // Compute columns based on TV width: 3 columns for 1080p/4k TVs, 2 for mid screens
             final int crossAxisCount = constraints.maxWidth > 1200 ? 3 : 2;
 
-            return GridView.builder(
-              padding: EdgeInsets.symmetric(
-                horizontal: 8.spMin,
-                vertical: 16.spMin,
-              ),
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: crossAxisCount,
-                crossAxisSpacing: 24.spMin,
-                mainAxisSpacing: 24.spMin,
-                childAspectRatio: 2.2,
-              ),
-              itemCount: vm.urlList.length,
-              itemBuilder: (context, index) {
-                final item = vm.urlList[index];
-                final bool isSelected = vm.focusedIndex == index;
+            return FocusTraversalGroup(
+              policy: ReadingOrderTraversalPolicy(),
+              child: GridView.builder(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 8.spMin,
+                  vertical: 16.spMin,
+                ),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: crossAxisCount,
+                  crossAxisSpacing: 24.spMin,
+                  mainAxisSpacing: 24.spMin,
+                  childAspectRatio: 2.2,
+                ),
+                itemCount: vm.urlList.length,
+                itemBuilder: (context, index) {
+                  final item = vm.urlList[index];
+                  final bool isSelected = vm.focusedIndex == index;
 
-                return TvUrlCardWidget(
-                  item: item,
-                  isSelected: isSelected,
-                  onFocusChanged: (hasFocus) {
-                    if (hasFocus) {
+                  return TvUrlCardWidget(
+                    item: item,
+                    isSelected: isSelected,
+                    autoFocus: index == 0,
+                    onFocusChanged: (hasFocus) {
+                      if (hasFocus) {
+                        context.read<TvPortalViewModel>().setFocusedIndex(index);
+                      }
+                    },
+                    onTap: () {
                       context.read<TvPortalViewModel>().setFocusedIndex(index);
-                    }
-                  },
-                  onTap: () {
-                    context.read<TvPortalViewModel>().setFocusedIndex(index);
-                    Navigator.of(context).pushNamed(
-                      TvWebViewScreen.routeName,
-                      arguments: TvWebViewScreenParams(
-                        title: item.displayTitle,
-                        url: item.displayUrl,
-                      ),
-                    );
-                  },
-                );
-              },
+                      Navigator.of(context).pushNamed(
+                        TvWebViewScreen.routeName,
+                        arguments: TvWebViewScreenParams(
+                          title: item.displayTitle,
+                          url: item.displayUrl,
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             );
           },
         );
