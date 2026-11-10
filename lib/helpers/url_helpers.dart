@@ -1,39 +1,26 @@
-import 'package:base_project/configs/app_configs.dart';
-import 'package:base_project/utils/enums.dart';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 
 class UrlHelpers {
-  static EnumBuildEnvironment get server => AppConfig.server;
+  /// Resolves the host for the local backend API based on platform.
+  /// - Web / desktop: `http://localhost:8000/api/v1/urls/public`
+  /// - Android TV Physical Device on same Wi-Fi: `http://192.168.100.188:8000/api/v1/urls/public`
+  /// - Android Emulator: `http://10.0.2.2:8000/api/v1/urls/public`
+  static String get publicTvUrls {
+    if (kIsWeb) {
+      return 'http://localhost:8000/api/v1/urls/public';
+    }
 
-  static String get baseURL {
-    switch (server) {
-      case EnumBuildEnvironment.live:
-        return '/// add url for live';
-      case EnumBuildEnvironment.uat:
-        return '/// add url for uat';
-      case EnumBuildEnvironment.dg:
-        return '/// add url for dg';
+    try {
+      if (Platform.isAndroid) {
+        // Use LAN IP so physical Android TVs / FireTVs on the local network can reach your Mac server
+        return 'http://192.168.100.188:8000/api/v1/urls/public';
       }
+    } catch (_) {}
+
+    return 'http://localhost:8000/api/v1/urls/public';
   }
 
-  static String get key {
-    switch (server) {
-      case EnumBuildEnvironment.live:
-        return '/// add key for live';
-      case EnumBuildEnvironment.uat:
-        return '/// add key for uat';
-      case EnumBuildEnvironment.dg:
-        return '/// add key for dg';
-      }
-  }
-
-  static String get baseUrlApi {
-    switch (server) {
-      case EnumBuildEnvironment.live:
-        return '/// add apiHead for live';
-      case EnumBuildEnvironment.uat:
-        return '/// add apiHead for uat';
-      case EnumBuildEnvironment.dg:
-        return '/// add apiHead for dg';
-      }
-  }
+  /// Alternative fallback for Android Emulator if LAN IP is unreachable
+  static String get emulatorTvUrls => 'http://10.0.2.2:8000/api/v1/urls/public';
 }
