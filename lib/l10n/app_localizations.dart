@@ -103,6 +103,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Hello'**
   String get hello;
+
+  /// No description provided for @appTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Smart TV Portal'**
+  String get appTitle;
+
+  /// No description provided for @splashLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Initializing TV Experience...'**
+  String get splashLoading;
+
+  /// No description provided for @urlListingTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Portal / Stream'**
+  String get urlListingTitle;
+
+  /// No description provided for @urlListingSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Use your remote D-Pad (Up / Down / Enter) to select a link'**
+  String get urlListingSubtitle;
+
+  /// No description provided for @emptyUrlList.
+  ///
+  /// In en, this message translates to:
+  /// **'No URLs found'**
+  String get emptyUrlList;
+
+  /// No description provided for @openUrl.
+  ///
+  /// In en, this message translates to:
+  /// **'Open'**
+  String get openUrl;
+
+  /// No description provided for @backToUrls.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to List'**
+  String get backToUrls;
+
+  /// No description provided for @webViewTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Web View Portal'**
+  String get webViewTitle;
+
+  /// No description provided for @webViewLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Loading content...'**
+  String get webViewLoading;
+
+  /// No description provided for @reload.
+  ///
+  /// In en, this message translates to:
+  /// **'Reload'**
+  String get reload;
+
+  /// No description provided for @exit.
+  ///
+  /// In en, this message translates to:
+  /// **'Exit'**
+  String get exit;
+
+  /// No description provided for @remoteHelp.
+  ///
+  /// In en, this message translates to:
+  /// **'Remote Control: Use Arrow Keys / D-Pad to Navigate • Enter / OK to Select'**
+  String get remoteHelp;
 }
 
 class _AppLocalizationsDelegate
