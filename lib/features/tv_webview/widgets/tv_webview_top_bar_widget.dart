@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 
-class TvWebViewTopBarWidget extends StatelessWidget {
+class TvWebViewTopBarWidget extends StatefulWidget {
   final String title;
   final String url;
   final VoidCallback onBack;
@@ -19,6 +19,14 @@ class TvWebViewTopBarWidget extends StatelessWidget {
     required this.onBack,
     required this.onReload,
   });
+
+  @override
+  State<TvWebViewTopBarWidget> createState() => _TvWebViewTopBarWidgetState();
+}
+
+class _TvWebViewTopBarWidgetState extends State<TvWebViewTopBarWidget> {
+  bool _isBackFocused = false;
+  bool _isReloadFocused = false;
 
   @override
   Widget build(BuildContext context) {
@@ -37,48 +45,65 @@ class TvWebViewTopBarWidget extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Focus(
+          FocusableActionDetector(
             autofocus: true,
-            child: Builder(
-              builder: (innerContext) {
-                final bool isFocused = Focus.of(innerContext).hasFocus;
-                return InkWell(
-                  onTap: onBack,
+            onFocusChange: (hasKeyboardFocus) {
+              if (mounted && _isBackFocused != hasKeyboardFocus) {
+                setState(() {
+                  _isBackFocused = hasKeyboardFocus;
+                });
+              }
+            },
+            onShowFocusHighlight: (hasHighlight) {
+              if (mounted && _isBackFocused != hasHighlight) {
+                setState(() {
+                  _isBackFocused = hasHighlight;
+                });
+              }
+            },
+            actions: <Type, Action<Intent>>{
+              ActivateIntent: CallbackAction<ActivateIntent>(
+                onInvoke: (intent) {
+                  widget.onBack();
+                  return null;
+                },
+              ),
+            },
+            child: GestureDetector(
+              onTap: widget.onBack,
+              behavior: HitTestBehavior.opaque,
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 14.spMin,
+                  vertical: 8.spMin,
+                ),
+                decoration: BoxDecoration(
+                  color: _isBackFocused
+                      ? brand.primaryBlue
+                      : brand.primaryBlue.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(10.spMin),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 14.spMin,
-                      vertical: 8.spMin,
+                  border: Border.all(
+                    color: _isBackFocused ? brand.primaryBlue : brand.tuna,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.arrow_back_rounded,
+                      size: 18.spMin,
+                      color: _isBackFocused ? brand.textWhite : brand.primaryBlue,
                     ),
-                    decoration: BoxDecoration(
-                      color: isFocused
-                          ? brand.primaryBlue
-                          : brand.primaryBlue.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(10.spMin),
-                      border: Border.all(
-                        color: isFocused ? brand.primaryBlue : brand.tuna,
+                    SizedBox(width: 8.spMin),
+                    Text(
+                      context.l10n.backToUrls,
+                      style: tsS14W600.copyWith(
+                        color: _isBackFocused ? brand.textWhite : brand.primaryBlue,
                       ),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.arrow_back_rounded,
-                          size: 18.spMin,
-                          color: isFocused ? brand.textWhite : brand.primaryBlue,
-                        ),
-                        SizedBox(width: 8.spMin),
-                        Text(
-                          context.l10n.backToUrls,
-                          style: tsS14W600.copyWith(
-                            color: isFocused ? brand.textWhite : brand.primaryBlue,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
+                  ],
+                ),
+              ),
             ),
           ),
           SizedBox(width: 16.spMin),
@@ -88,13 +113,13 @@ class TvWebViewTopBarWidget extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  title,
+                  widget.title,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: tsS16W600.copyWith(color: brand.textWhite),
                 ),
                 Text(
-                  url,
+                  widget.url,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: tsS12W400.copyWith(color: brand.textMediumGray),
@@ -103,47 +128,64 @@ class TvWebViewTopBarWidget extends StatelessWidget {
             ),
           ),
           SizedBox(width: 16.spMin),
-          Focus(
-            child: Builder(
-              builder: (innerContext) {
-                final bool isFocused = Focus.of(innerContext).hasFocus;
-                return InkWell(
-                  onTap: onReload,
+          FocusableActionDetector(
+            onFocusChange: (hasKeyboardFocus) {
+              if (mounted && _isReloadFocused != hasKeyboardFocus) {
+                setState(() {
+                  _isReloadFocused = hasKeyboardFocus;
+                });
+              }
+            },
+            onShowFocusHighlight: (hasHighlight) {
+              if (mounted && _isReloadFocused != hasHighlight) {
+                setState(() {
+                  _isReloadFocused = hasHighlight;
+                });
+              }
+            },
+            actions: <Type, Action<Intent>>{
+              ActivateIntent: CallbackAction<ActivateIntent>(
+                onInvoke: (intent) {
+                  widget.onReload();
+                  return null;
+                },
+              ),
+            },
+            child: GestureDetector(
+              onTap: widget.onReload,
+              behavior: HitTestBehavior.opaque,
+              child: Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 12.spMin,
+                  vertical: 8.spMin,
+                ),
+                decoration: BoxDecoration(
+                  color: _isReloadFocused
+                      ? brand.primaryBlue
+                      : brand.primaryBlue.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(10.spMin),
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 12.spMin,
-                      vertical: 8.spMin,
+                  border: Border.all(
+                    color: _isReloadFocused ? brand.primaryBlue : brand.tuna,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.refresh_rounded,
+                      size: 18.spMin,
+                      color: _isReloadFocused ? brand.textWhite : brand.primaryBlue,
                     ),
-                    decoration: BoxDecoration(
-                      color: isFocused
-                          ? brand.primaryBlue
-                          : brand.primaryBlue.withValues(alpha: 0.12),
-                      borderRadius: BorderRadius.circular(10.spMin),
-                      border: Border.all(
-                        color: isFocused ? brand.primaryBlue : brand.tuna,
+                    SizedBox(width: 6.spMin),
+                    Text(
+                      context.l10n.reload,
+                      style: tsS14W600.copyWith(
+                        color: _isReloadFocused ? brand.textWhite : brand.primaryBlue,
                       ),
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.refresh_rounded,
-                          size: 18.spMin,
-                          color: isFocused ? brand.textWhite : brand.primaryBlue,
-                        ),
-                        SizedBox(width: 6.spMin),
-                        Text(
-                          context.l10n.reload,
-                          style: tsS14W600.copyWith(
-                            color: isFocused ? brand.textWhite : brand.primaryBlue,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
+                  ],
+                ),
+              ),
             ),
           ),
           SizedBox(width: 10.spMin),

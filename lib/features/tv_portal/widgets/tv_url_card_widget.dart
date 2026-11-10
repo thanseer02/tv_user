@@ -23,30 +23,7 @@ class TvUrlCardWidget extends StatefulWidget {
 }
 
 class _TvUrlCardWidgetState extends State<TvUrlCardWidget> {
-  final FocusNode _focusNode = FocusNode();
   bool _isFocused = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _focusNode.addListener(_handleFocusChange);
-  }
-
-  void _handleFocusChange() {
-    if (mounted) {
-      setState(() {
-        _isFocused = _focusNode.hasFocus;
-      });
-      widget.onFocusChanged?.call(_focusNode.hasFocus);
-    }
-  }
-
-  @override
-  void dispose() {
-    _focusNode.removeListener(_handleFocusChange);
-    _focusNode.dispose();
-    super.dispose();
-  }
 
   IconData _getIconData(String? category, String? iconName) {
     if (iconName != null) {
@@ -90,18 +67,38 @@ class _TvUrlCardWidgetState extends State<TvUrlCardWidget> {
     final brand = context.brand;
     final bool highlighted = _isFocused || widget.isSelected;
 
-    return Focus(
-      focusNode: _focusNode,
-      onKeyEvent: (node, event) {
-        return KeyEventResult.ignored;
+    return FocusableActionDetector(
+      onShowFocusHighlight: (hasHighlight) {
+        if (mounted && _isFocused != hasHighlight) {
+          setState(() {
+            _isFocused = hasHighlight;
+          });
+          widget.onFocusChanged?.call(hasHighlight);
+        }
+      },
+      onFocusChange: (hasKeyboardFocus) {
+        if (mounted && _isFocused != hasKeyboardFocus) {
+          setState(() {
+            _isFocused = hasKeyboardFocus;
+          });
+          widget.onFocusChanged?.call(hasKeyboardFocus);
+        }
+      },
+      actions: <Type, Action<Intent>>{
+        ActivateIntent: CallbackAction<ActivateIntent>(
+          onInvoke: (intent) {
+            widget.onTap();
+            return null;
+          },
+        ),
       },
       child: AnimatedScale(
         scale: highlighted ? 1.03 : 1.0,
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeOutCubic,
-        child: InkWell(
+        child: GestureDetector(
           onTap: widget.onTap,
-          borderRadius: BorderRadius.circular(16.spMin),
+          behavior: HitTestBehavior.opaque,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             padding: EdgeInsets.all(20.spMin),
