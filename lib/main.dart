@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
           builder: (theme, darkTheme) {
             return MaterialApp(
               navigatorKey: AppConfig.navKey,
-              title: 'Project Name',
+              title: 'TV Portal',
               themeMode: context.watch<ThemeProvider>().themeMode,
               localizationsDelegates: const [
                 AppLocalizations.delegate,

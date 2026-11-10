@@ -1,11 +1,11 @@
 {
-    "name": "base_project",
-    "short_name": "base_project",
+    "name": "TV Portal",
+    "short_name": "TV Portal",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "Smart TV Web Portal",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
