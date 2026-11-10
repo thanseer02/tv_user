@@ -91,7 +91,7 @@ class _TvUrlCardWidgetState extends State<TvUrlCardWidget> {
         ),
       },
       child: AnimatedScale(
-        scale: highlighted ? 1.03 : 1.0,
+        scale: highlighted ? 1.05 : 1.0,
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeOutCubic,
         child: GestureDetector(
@@ -99,23 +99,23 @@ class _TvUrlCardWidgetState extends State<TvUrlCardWidget> {
           behavior: HitTestBehavior.opaque,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            padding: EdgeInsets.all(20.spMin),
+            padding: EdgeInsets.all(24.spMin),
             decoration: BoxDecoration(
               color: highlighted
-                  ? brand.primaryBlue.withValues(alpha: 0.22)
+                  ? brand.primaryBlue.withValues(alpha: 0.28)
                   : brand.bgDarkNavy,
-              borderRadius: BorderRadius.circular(16.spMin),
+              borderRadius: BorderRadius.circular(20.spMin),
               border: Border.all(
                 color: highlighted ? brand.primaryBlue : brand.tuna,
-                width: highlighted ? 2.5.spMin : 1.spMin,
+                width: highlighted ? 3.spMin : 1.5.spMin,
               ),
               boxShadow: highlighted
                   ? [
                       BoxShadow(
-                        color: brand.primaryBlue.withValues(alpha: 0.35),
-                        blurRadius: 18.spMin,
-                        spreadRadius: 2.spMin,
-                        offset: Offset(0, 4.spMin),
+                        color: brand.primaryBlue.withValues(alpha: 0.45),
+                        blurRadius: 28.spMin,
+                        spreadRadius: 4.spMin,
+                        offset: Offset(0, 8.spMin),
                       )
                     ]
                   : [],
@@ -123,21 +123,21 @@ class _TvUrlCardWidgetState extends State<TvUrlCardWidget> {
             child: Row(
               children: [
                 Container(
-                  width: 56.spMin,
-                  height: 56.spMin,
+                  width: 76.spMin,
+                  height: 76.spMin,
                   decoration: BoxDecoration(
                     color: highlighted
                         ? brand.primaryBlue
-                        : brand.primaryBlue.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(14.spMin),
+                        : brand.primaryBlue.withValues(alpha: 0.18),
+                    borderRadius: BorderRadius.circular(18.spMin),
                   ),
                   child: Icon(
                     _getIconData(widget.item.category, widget.item.iconName),
-                    size: 28.spMin,
+                    size: 40.spMin,
                     color: highlighted ? brand.textWhite : brand.primaryBlue,
                   ),
                 ),
-                SizedBox(width: 20.spMin),
+                SizedBox(width: 24.spMin),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,58 +150,58 @@ class _TvUrlCardWidgetState extends State<TvUrlCardWidget> {
                               widget.item.displayTitle,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: tsS18W600.copyWith(
+                              style: tsS22W600.copyWith(
                                 color: highlighted ? brand.textWhite : brand.textOffWhite,
                               ),
                             ),
                           ),
                           if (widget.item.category != null &&
                               widget.item.category!.isNotEmpty) ...[
-                            SizedBox(width: 8.spMin),
+                            SizedBox(width: 12.spMin),
                             Container(
                               padding: EdgeInsets.symmetric(
-                                horizontal: 8.spMin,
-                                vertical: 2.spMin,
+                                horizontal: 12.spMin,
+                                vertical: 4.spMin,
                               ),
                               decoration: BoxDecoration(
-                                color: brand.primaryBlue.withValues(alpha: 0.2),
-                                borderRadius: BorderRadius.circular(6.spMin),
+                                color: brand.primaryBlue.withValues(alpha: 0.25),
+                                borderRadius: BorderRadius.circular(8.spMin),
                               ),
                               child: Text(
                                 widget.item.category!,
-                                style: tsS12W400.copyWith(color: brand.lightBlue),
+                                style: tsS14W600.copyWith(color: brand.lightBlue),
                               ),
                             ),
                           ],
                         ],
                       ),
                       if (widget.item.displayDescription.isNotEmpty) ...[
-                        SizedBox(height: 6.spMin),
+                        SizedBox(height: 8.spMin),
                         Text(
                           widget.item.displayDescription,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: tsS14W400.copyWith(
+                          style: tsS15W500.copyWith(
                             color: brand.textMediumGray,
                           ),
                         ),
                       ],
-                      SizedBox(height: 6.spMin),
+                      SizedBox(height: 8.spMin),
                       Text(
                         widget.item.displayUrl,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: tsS12W400.copyWith(
+                        style: tsS14W400.copyWith(
                           color: brand.lightBlue,
                         ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(width: 12.spMin),
+                SizedBox(width: 16.spMin),
                 Icon(
                   Icons.arrow_forward_ios_rounded,
-                  size: 20.spMin,
+                  size: 24.spMin,
                   color: highlighted ? brand.primaryBlue : brand.textSubtleGray,
                 ),
               ],

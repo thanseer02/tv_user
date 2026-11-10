@@ -50,7 +50,8 @@ class _SplashScreenState extends State<SplashScreen>
 
     _timer = Timer(const Duration(milliseconds: 2200), () {
       if (mounted) {
-        Navigator.of(context).pushReplacementNamed(TvUrlListingScreen.routeName);
+        Navigator.of(context)
+            .pushReplacementNamed(TvUrlListingScreen.routeName);
       }
     });
   }
@@ -77,48 +78,48 @@ class _SplashScreenState extends State<SplashScreen>
               ScaleTransition(
                 scale: _scaleAnimation,
                 child: Container(
-                  width: 110.spMin,
-                  height: 110.spMin,
+                  width: 140.spMin,
+                  height: 140.spMin,
                   decoration: BoxDecoration(
                     color: brand.primaryBlue,
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: brand.primaryBlue.withValues(alpha: 0.45),
-                        blurRadius: 30.spMin,
-                        spreadRadius: 4.spMin,
-                        offset: Offset(0, 8.spMin),
+                        color: brand.primaryBlue.withValues(alpha: 0.5),
+                        blurRadius: 40.spMin,
+                        spreadRadius: 6.spMin,
+                        offset: Offset(0, 10.spMin),
                       ),
                     ],
                   ),
                   child: Icon(
                     Icons.tv_rounded,
-                    size: 60.spMin,
+                    size: 76.spMin,
                     color: brand.textWhite,
                   ),
                 ),
               ),
-              SizedBox(height: 28.spMin),
+              SizedBox(height: 32.spMin),
               Text(
                 context.l10n.appTitle,
-                style: tsS22W600.copyWith(
+                style: tsS28W600.copyWith(
                   color: brand.textWhite,
-                  letterSpacing: 1.2,
+                  letterSpacing: 1.5,
                 ),
               ),
-              SizedBox(height: 10.spMin),
+              SizedBox(height: 12.spMin),
               Text(
                 context.l10n.splashLoading,
-                style: tsS14W400.copyWith(
+                style: tsS16W500.copyWith(
                   color: brand.textLightGray,
                 ),
               ),
-              SizedBox(height: 36.spMin),
+              SizedBox(height: 40.spMin),
               SizedBox(
-                width: 32.spMin,
-                height: 32.spMin,
+                width: 44.spMin,
+                height: 44.spMin,
                 child: CircularProgressIndicator(
-                  strokeWidth: 3.spMin,
+                  strokeWidth: 4.spMin,
                   valueColor: AlwaysStoppedAnimation<Color>(brand.primaryBlue),
                 ),
               ),

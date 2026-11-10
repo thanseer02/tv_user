@@ -19,8 +19,13 @@ class TvUrlListWidget extends StatelessWidget {
       builder: (context, vm, child) {
         if (vm.isLoading && vm.urlList.isEmpty) {
           return Center(
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(brand.primaryBlue),
+            child: SizedBox(
+              width: 48.spMin,
+              height: 48.spMin,
+              child: CircularProgressIndicator(
+                strokeWidth: 4.spMin,
+                valueColor: AlwaysStoppedAnimation<Color>(brand.primaryBlue),
+              ),
             ),
           );
         }
@@ -29,35 +34,51 @@ class TvUrlListWidget extends StatelessWidget {
           return Center(
             child: Text(
               context.l10n.emptyUrlList,
-              style: tsS16W500.copyWith(color: brand.textMediumGray),
+              style: tsS18W600.copyWith(color: brand.textMediumGray),
             ),
           );
         }
 
-        return ListView.separated(
-          padding: EdgeInsets.symmetric(vertical: 8.spMin),
-          itemCount: vm.urlList.length,
-          separatorBuilder: (_, __) => SizedBox(height: 14.spMin),
-          itemBuilder: (context, index) {
-            final item = vm.urlList[index];
-            final bool isSelected = vm.focusedIndex == index;
+        // TV 16:9 widescreen layout: Responsive multi-column grid
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            // Compute columns based on TV width: 3 columns for 1080p/4k TVs, 2 for mid screens
+            final int crossAxisCount = constraints.maxWidth > 1200 ? 3 : 2;
 
-            return TvUrlCardWidget(
-              item: item,
-              isSelected: isSelected,
-              onFocusChanged: (hasFocus) {
-                if (hasFocus) {
-                  context.read<TvPortalViewModel>().setFocusedIndex(index);
-                }
-              },
-              onTap: () {
-                context.read<TvPortalViewModel>().setFocusedIndex(index);
-                Navigator.of(context).pushNamed(
-                  TvWebViewScreen.routeName,
-                  arguments: TvWebViewScreenParams(
-                    title: item.displayTitle,
-                    url: item.displayUrl,
-                  ),
+            return GridView.builder(
+              padding: EdgeInsets.symmetric(
+                horizontal: 8.spMin,
+                vertical: 16.spMin,
+              ),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: crossAxisCount,
+                crossAxisSpacing: 24.spMin,
+                mainAxisSpacing: 24.spMin,
+                childAspectRatio: 2.2,
+              ),
+              itemCount: vm.urlList.length,
+              itemBuilder: (context, index) {
+                final item = vm.urlList[index];
+                final bool isSelected = vm.focusedIndex == index;
+
+                return TvUrlCardWidget(
+                  item: item,
+                  isSelected: isSelected,
+                  onFocusChanged: (hasFocus) {
+                    if (hasFocus) {
+                      context.read<TvPortalViewModel>().setFocusedIndex(index);
+                    }
+                  },
+                  onTap: () {
+                    context.read<TvPortalViewModel>().setFocusedIndex(index);
+                    Navigator.of(context).pushNamed(
+                      TvWebViewScreen.routeName,
+                      arguments: TvWebViewScreenParams(
+                        title: item.displayTitle,
+                        url: item.displayUrl,
+                      ),
+                    );
+                  },
                 );
               },
             );

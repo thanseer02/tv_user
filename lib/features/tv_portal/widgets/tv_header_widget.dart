@@ -18,39 +18,63 @@ class TvHeaderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final brand = context.brand;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Row(
-          children: [
-            Container(
-              padding: EdgeInsets.all(10.spMin),
-              decoration: BoxDecoration(
-                color: brand.primaryBlue.withValues(alpha: 0.15),
-                borderRadius: BorderRadius.circular(12.spMin),
-              ),
-              child: Icon(
-                Icons.tv_rounded,
-                size: 26.spMin,
-                color: brand.primaryBlue,
-              ),
+        Container(
+          padding: EdgeInsets.all(16.spMin),
+          decoration: BoxDecoration(
+            color: brand.primaryBlue.withValues(alpha: 0.18),
+            borderRadius: BorderRadius.circular(16.spMin),
+            border: Border.all(
+              color: brand.primaryBlue.withValues(alpha: 0.3),
+              width: 1.5.spMin,
             ),
-            SizedBox(width: 14.spMin),
-            Text(
-              context.l10n.appTitle,
-              style: tsS16W600.copyWith(color: brand.primaryBlue),
-            ),
-          ],
+          ),
+          child: Icon(
+            Icons.tv_rounded,
+            size: 38.spMin,
+            color: brand.primaryBlue,
+          ),
         ),
-        SizedBox(height: 12.spMin),
-        Text(
-          title,
-          style: tsS22W600.copyWith(color: brand.textWhite),
-        ),
-        SizedBox(height: 6.spMin),
-        Text(
-          subtitle,
-          style: tsS14W400.copyWith(color: brand.textLightGray),
+        SizedBox(width: 20.spMin),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    context.l10n.appTitle,
+                    style: tsS16W600.copyWith(color: brand.primaryBlue),
+                  ),
+                  SizedBox(width: 10.spMin),
+                  Container(
+                    width: 6.spMin,
+                    height: 6.spMin,
+                    decoration: BoxDecoration(
+                      color: brand.primaryBlue.withValues(alpha: 0.5),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  SizedBox(width: 10.spMin),
+                  Text(
+                    subtitle,
+                    style: tsS15W500.copyWith(color: brand.textMediumGray),
+                  ),
+                ],
+              ),
+              SizedBox(height: 6.spMin),
+              Text(
+                title,
+                style: tsS28W600.copyWith(
+                  color: brand.textWhite,
+                  letterSpacing: 0.5,
+                ),
+              ),
+            ],
+          ),
         ),
       ],
     );

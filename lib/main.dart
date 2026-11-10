@@ -29,7 +29,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown],
+      [
+        DeviceOrientation.landscapeLeft,
+        DeviceOrientation.landscapeRight,
+      ],
     );
     return MultiProvider(
       providers: [
@@ -41,7 +44,8 @@ class MyApp extends StatelessWidget {
         ),
       ],
       builder: (context, child) => ScreenUtilInit(
-        designSize: const Size(428, 926),
+        designSize: const Size(1920, 1080),
+        minTextAdapt: true,
         builder: (context, child) => AdaptiveTheme(
           initial: AdaptiveThemeMode.dark,
           light: appLightTheme,

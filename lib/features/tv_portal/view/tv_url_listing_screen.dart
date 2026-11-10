@@ -53,8 +53,8 @@ class _TvUrlListingScreenState extends State<TvUrlListingScreen> {
           body: SafeArea(
             child: Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: 32.spMin,
-                vertical: 20.spMin,
+                horizontal: 48.spMin,
+                vertical: 32.spMin,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -63,35 +63,35 @@ class _TvUrlListingScreenState extends State<TvUrlListingScreen> {
                     title: context.l10n.urlListingTitle,
                     subtitle: context.l10n.urlListingSubtitle,
                   ),
-                  SizedBox(height: 18.spMin),
+                  SizedBox(height: 20.spMin),
                   const Expanded(
                     child: TvUrlListWidget(),
                   ),
-                  SizedBox(height: 12.spMin),
+                  SizedBox(height: 16.spMin),
                   Container(
                     width: double.infinity,
                     padding: EdgeInsets.symmetric(
-                      horizontal: 16.spMin,
-                      vertical: 10.spMin,
+                      horizontal: 24.spMin,
+                      vertical: 12.spMin,
                     ),
                     decoration: BoxDecoration(
                       color: brand.bgDarkNavy,
-                      borderRadius: BorderRadius.circular(10.spMin),
-                      border: Border.all(color: brand.tuna),
+                      borderRadius: BorderRadius.circular(14.spMin),
+                      border: Border.all(color: brand.tuna, width: 1.spMin),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Icon(
                           Icons.gamepad_rounded,
-                          size: 18.spMin,
+                          size: 22.spMin,
                           color: brand.primaryBlue,
                         ),
-                        SizedBox(width: 8.spMin),
+                        SizedBox(width: 12.spMin),
                         Flexible(
                           child: Text(
                             context.l10n.remoteHelp,
-                            style: tsS12W400.copyWith(color: brand.textMediumGray),
+                            style: tsS14W400.copyWith(color: brand.textMediumGray),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
