@@ -100,7 +100,6 @@ class _TvUrlCardWidgetState extends State<TvUrlCardWidget> {
         duration: const Duration(milliseconds: 200),
         curve: Curves.easeOutCubic,
         child: InkWell(
-          focusNode: _focusNode,
           onTap: widget.onTap,
           borderRadius: BorderRadius.circular(16.spMin),
           child: AnimatedContainer(
