@@ -49,7 +49,7 @@ class _TvUrlListingScreenState extends State<TvUrlListingScreen> {
           LogicalKeySet(LogicalKeyboardKey.numpadEnter): const ActivateIntent(),
         },
         child: Scaffold(
-          backgroundColor: brand.background,
+          backgroundColor: brand.bgDeepNavy,
           body: SafeArea(
             child: Padding(
               padding: EdgeInsets.symmetric(
@@ -75,9 +75,9 @@ class _TvUrlListingScreenState extends State<TvUrlListingScreen> {
                       vertical: 10.spMin,
                     ),
                     decoration: BoxDecoration(
-                      color: brand.surface,
+                      color: brand.bgDarkNavy,
                       borderRadius: BorderRadius.circular(10.spMin),
-                      border: Border.all(color: brand.borderSubtle),
+                      border: Border.all(color: brand.tuna),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -85,13 +85,13 @@ class _TvUrlListingScreenState extends State<TvUrlListingScreen> {
                         Icon(
                           Icons.gamepad_rounded,
                           size: 18.spMin,
-                          color: brand.primary,
+                          color: brand.primaryBlue,
                         ),
                         SizedBox(width: 8.spMin),
                         Flexible(
                           child: Text(
                             context.l10n.remoteHelp,
-                            style: tsS12W400.copyWith(color: brand.textSecondary),
+                            style: tsS12W400.copyWith(color: brand.textMediumGray),
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),

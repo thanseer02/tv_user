@@ -26,31 +26,31 @@ class TvHeaderWidget extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(10.spMin),
               decoration: BoxDecoration(
-                color: brand.primary.withValues(alpha: 0.15),
+                color: brand.primaryBlue.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(12.spMin),
               ),
               child: Icon(
                 Icons.tv_rounded,
                 size: 26.spMin,
-                color: brand.primary,
+                color: brand.primaryBlue,
               ),
             ),
             SizedBox(width: 14.spMin),
             Text(
               context.l10n.appTitle,
-              style: tsS16W600.copyWith(color: brand.primary),
+              style: tsS16W600.copyWith(color: brand.primaryBlue),
             ),
           ],
         ),
         SizedBox(height: 12.spMin),
         Text(
           title,
-          style: tsS22W600.copyWith(color: brand.textPrimary),
+          style: tsS22W600.copyWith(color: brand.textWhite),
         ),
         SizedBox(height: 6.spMin),
         Text(
           subtitle,
-          style: tsS14W400.copyWith(color: brand.textSecondary),
+          style: tsS14W400.copyWith(color: brand.textLightGray),
         ),
       ],
     );

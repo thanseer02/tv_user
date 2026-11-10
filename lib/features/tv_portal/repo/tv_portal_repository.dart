@@ -1,64 +1,47 @@
 import 'package:base_project/features/tv_portal/model/tv_portal_item_model.dart';
 import 'package:base_project/services/web_api_services.dart';
+import 'package:base_project/utils/urls.dart';
+import 'package:dio/dio.dart';
 
 extension TvPortalRepository on WebAPIService {
+  /// Fetches public URLs from the backend API: `http://localhost:8000/api/v1/urls/public`
   Future<List<TvPortalItemModel>> fetchTvPortalUrls({
     required Function(String error) onError,
     required Function(List<TvPortalItemModel> urls) onSuccess,
   }) async {
     try {
-      // Default curated list of TV-optimized URLs / portals / dashboards
-      final List<Map<String, dynamic>> rawData = [
-        {
-          'id': '1',
-          'title': 'Google News',
-          'description': 'Latest headlines, world news, business, and technology.',
-          'url': 'https://news.google.com',
-          'icon_name': 'newspaper',
-        },
-        {
-          'id': '2',
-          'title': 'Flutter Official Website',
-          'description': 'Multi-platform development portal, docs and showcase.',
-          'url': 'https://flutter.dev',
-          'icon_name': 'flutter',
-        },
-        {
-          'id': '3',
-          'title': 'BBC World News',
-          'description': 'International breaking news and live broadcast coverage.',
-          'url': 'https://www.bbc.com/news',
-          'icon_name': 'public',
-        },
-        {
-          'id': '4',
-          'title': 'NASA Astronomy Picture of the Day',
-          'description': 'Daily cosmos imagery, deep space missions, and discoveries.',
-          'url': 'https://apod.nasa.gov/apod/astropix.html',
-          'icon_name': 'satellite',
-        },
-        {
-          'id': '5',
-          'title': 'Wikipedia Portal',
-          'description': 'Free encyclopedia with featured articles and media.',
-          'url': 'https://en.wikipedia.org',
-          'icon_name': 'menu_book',
-        },
-        {
-          'id': '6',
-          'title': 'Weather Radar Live',
-          'description': 'Interactive global weather satellite and forecast maps.',
-          'url': 'https://weather.com',
-          'icon_name': 'cloud',
-        },
-      ];
+      final response = await dio.get<dynamic>(
+        urlPublicTvUrls,
+        options: Options(
+          headers: {
+            'Accept': 'application/json',
+          },
+        ),
+      );
 
-      final items =
-          rawData.map((json) => TvPortalItemModel.fromJson(json)).toList();
-      onSuccess(items);
-      return items;
+      final dynamic responseData = response.data;
+      if (responseData is List) {
+        final List<TvPortalItemModel> items = responseData
+            .map((e) => TvPortalItemModel.fromJson(e as Map<String, dynamic>))
+            .toList();
+        onSuccess(items);
+        return items;
+      } else if (responseData is Map<String, dynamic>) {
+        final dynamic rawList = responseData['data'] ?? responseData['urls'];
+        if (rawList is List) {
+          final List<TvPortalItemModel> items = rawList
+              .map((e) => TvPortalItemModel.fromJson(e as Map<String, dynamic>))
+              .toList();
+          onSuccess(items);
+          return items;
+        }
+      }
+
+      onError('Invalid response format received from server');
+      return [];
     } catch (e) {
-      onError(e.toString());
+      final String errorMessage = e.toString();
+      onError(errorMessage);
       return [];
     }
   }

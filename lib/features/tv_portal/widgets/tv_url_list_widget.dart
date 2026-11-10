@@ -20,7 +20,7 @@ class TvUrlListWidget extends StatelessWidget {
         if (vm.isLoading && vm.urlList.isEmpty) {
           return Center(
             child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(brand.primary),
+              valueColor: AlwaysStoppedAnimation<Color>(brand.primaryBlue),
             ),
           );
         }
@@ -29,7 +29,7 @@ class TvUrlListWidget extends StatelessWidget {
           return Center(
             child: Text(
               context.l10n.emptyUrlList,
-              style: tsS16W500.copyWith(color: brand.textSecondary),
+              style: tsS16W500.copyWith(color: brand.textMediumGray),
             ),
           );
         }
@@ -55,8 +55,8 @@ class TvUrlListWidget extends StatelessWidget {
                 Navigator.of(context).pushNamed(
                   TvWebViewScreen.routeName,
                   arguments: TvWebViewScreenParams(
-                    title: item.title,
-                    url: item.url,
+                    title: item.displayTitle,
+                    url: item.displayUrl,
                   ),
                 );
               },

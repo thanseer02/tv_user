@@ -1,14 +1,11 @@
-import 'package:base_project/features/demo_listing/view/demo_listing_screen.dart';
-import 'package:base_project/features/native_haptics_sample/view/native_haptics_sample_screen.dart';
-import 'package:base_project/features/splashscreen/view/splashscreen.dart';
+import 'package:base_project/features/tv_portal/view/tv_url_listing_screen.dart';
+import 'package:base_project/features/tv_webview/view/tv_webview_screen.dart';
 import 'package:base_project/utils/connection_failed_screen.dart';
 import 'package:flutter/material.dart';
 
 Map<String, Widget Function(BuildContext context)> appRoutes() => {
-      SplashScreen.routeName: (context) => const SplashScreen(),
-      DemoListingScreen.routeName: (context) => const DemoListingScreen(),
-      NativeHapticsSampleScreen.routeName: (context) =>
-          const NativeHapticsSampleScreen(),
+      TvUrlListingScreen.routeName: (context) => const TvUrlListingScreen(),
+      TvWebViewScreen.routeName: (context) => const TvWebViewScreen(),
     };
 
 Widget? _getScreen(RouteSettings settings) {
@@ -19,13 +16,9 @@ Widget? _getScreen(RouteSettings settings) {
       return ConnectionFailedScreen(
         param: params,
       );
-    // case OwnerManageUserScreen.route:
-    //   OwnerManageUserScreenParams params =
-    //       settings.arguments as OwnerManageUserScreenParams;
-    //   return OwnerManageUserScreen(
-    //     params: params,
-    //   );
-
+    case TvWebViewScreen.routeName:
+      final params = settings.arguments as TvWebViewScreenParams?;
+      return TvWebViewScreen(params: params);
     default:
       return null;
   }

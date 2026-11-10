@@ -2,6 +2,8 @@ import 'package:base_project/features/tv_portal/model/tv_portal_item_model.dart'
 import 'package:base_project/features/tv_portal/repo/tv_portal_repository.dart';
 import 'package:base_project/providers/view_model.dart';
 import 'package:base_project/services/web_api_services.dart';
+import 'package:base_project/utils/app_build_methods.dart';
+import 'package:base_project/utils/extensions.dart';
 
 class TvPortalViewModel extends ViewModel {
   List<TvPortalItemModel> _urlList = [];
@@ -21,10 +23,11 @@ class TvPortalViewModel extends ViewModel {
     await WebAPIService()
         .fetchTvPortalUrls(
           onError: (error) {
-            // Error handling through base progress/API mixin
+            showToast(error);
           },
           onSuccess: (items) {
             _urlList = items;
+            _focusedIndex = 0;
             notifyListeners();
           },
         )

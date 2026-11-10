@@ -48,23 +48,41 @@ class _TvUrlCardWidgetState extends State<TvUrlCardWidget> {
     super.dispose();
   }
 
-  IconData _getIconData(String? iconName) {
-    switch (iconName) {
-      case 'newspaper':
-        return Icons.newspaper_rounded;
-      case 'flutter':
-        return Icons.flutter_dash_rounded;
-      case 'public':
-        return Icons.public_rounded;
-      case 'satellite':
-        return Icons.satellite_alt_rounded;
-      case 'menu_book':
-        return Icons.menu_book_rounded;
-      case 'cloud':
-        return Icons.cloud_queue_rounded;
-      default:
-        return Icons.tv_rounded;
+  IconData _getIconData(String? category, String? iconName) {
+    if (iconName != null) {
+      switch (iconName) {
+        case 'newspaper':
+          return Icons.newspaper_rounded;
+        case 'flutter':
+          return Icons.flutter_dash_rounded;
+        case 'public':
+          return Icons.public_rounded;
+        case 'satellite':
+          return Icons.satellite_alt_rounded;
+        case 'menu_book':
+          return Icons.menu_book_rounded;
+        case 'cloud':
+          return Icons.cloud_queue_rounded;
+      }
     }
+
+    if (category != null) {
+      switch (category.toLowerCase()) {
+        case 'general':
+          return Icons.language_rounded;
+        case 'news':
+          return Icons.newspaper_rounded;
+        case 'media':
+        case 'video':
+          return Icons.live_tv_rounded;
+        case 'dashboard':
+          return Icons.dashboard_rounded;
+        case 'weather':
+          return Icons.cloud_rounded;
+      }
+    }
+
+    return Icons.tv_rounded;
   }
 
   @override
@@ -90,17 +108,17 @@ class _TvUrlCardWidgetState extends State<TvUrlCardWidget> {
             padding: EdgeInsets.all(20.spMin),
             decoration: BoxDecoration(
               color: highlighted
-                  ? brand.primary.withValues(alpha: 0.22)
-                  : brand.surface,
+                  ? brand.primaryBlue.withValues(alpha: 0.22)
+                  : brand.bgDarkNavy,
               borderRadius: BorderRadius.circular(16.spMin),
               border: Border.all(
-                color: highlighted ? brand.primary : brand.borderSubtle,
+                color: highlighted ? brand.primaryBlue : brand.tuna,
                 width: highlighted ? 2.5.spMin : 1.spMin,
               ),
               boxShadow: highlighted
                   ? [
                       BoxShadow(
-                        color: brand.primary.withValues(alpha: 0.35),
+                        color: brand.primaryBlue.withValues(alpha: 0.35),
                         blurRadius: 18.spMin,
                         spreadRadius: 2.spMin,
                         offset: Offset(0, 4.spMin),
@@ -115,14 +133,14 @@ class _TvUrlCardWidgetState extends State<TvUrlCardWidget> {
                   height: 56.spMin,
                   decoration: BoxDecoration(
                     color: highlighted
-                        ? brand.primary
-                        : brand.primary.withValues(alpha: 0.15),
+                        ? brand.primaryBlue
+                        : brand.primaryBlue.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(14.spMin),
                   ),
                   child: Icon(
-                    _getIconData(widget.item.iconName),
+                    _getIconData(widget.item.category, widget.item.iconName),
                     size: 28.spMin,
-                    color: highlighted ? brand.onPrimary : brand.primary,
+                    color: highlighted ? brand.textWhite : brand.primaryBlue,
                   ),
                 ),
                 SizedBox(width: 20.spMin),
@@ -131,30 +149,54 @@ class _TvUrlCardWidgetState extends State<TvUrlCardWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        widget.item.title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: tsS18W600.copyWith(
-                          color: highlighted ? brand.primary : brand.textPrimary,
-                        ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              widget.item.displayTitle,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: tsS18W600.copyWith(
+                                color: highlighted ? brand.textWhite : brand.textOffWhite,
+                              ),
+                            ),
+                          ),
+                          if (widget.item.category != null &&
+                              widget.item.category!.isNotEmpty) ...[
+                            SizedBox(width: 8.spMin),
+                            Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 8.spMin,
+                                vertical: 2.spMin,
+                              ),
+                              decoration: BoxDecoration(
+                                color: brand.primaryBlue.withValues(alpha: 0.2),
+                                borderRadius: BorderRadius.circular(6.spMin),
+                              ),
+                              child: Text(
+                                widget.item.category!,
+                                style: tsS12W400.copyWith(color: brand.lightBlue),
+                              ),
+                            ),
+                          ],
+                        ],
                       ),
                       SizedBox(height: 6.spMin),
                       Text(
-                        widget.item.description,
+                        widget.item.displayDescription,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: tsS14W400.copyWith(
-                          color: brand.textSecondary,
+                          color: brand.textMediumGray,
                         ),
                       ),
                       SizedBox(height: 6.spMin),
                       Text(
-                        widget.item.url,
+                        widget.item.displayUrl,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: tsS12W400.copyWith(
-                          color: brand.primary.withValues(alpha: 0.8),
+                          color: brand.lightBlue,
                         ),
                       ),
                     ],
@@ -164,7 +206,7 @@ class _TvUrlCardWidgetState extends State<TvUrlCardWidget> {
                 Icon(
                   Icons.arrow_forward_ios_rounded,
                   size: 20.spMin,
-                  color: highlighted ? brand.primary : brand.textDisabled,
+                  color: highlighted ? brand.primaryBlue : brand.textSubtleGray,
                 ),
               ],
             ),
