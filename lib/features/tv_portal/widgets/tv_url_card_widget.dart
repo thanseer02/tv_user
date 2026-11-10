@@ -30,8 +30,6 @@ class _TvUrlCardWidgetState extends State<TvUrlCardWidget> {
       switch (iconName) {
         case 'newspaper':
           return Icons.newspaper_rounded;
-        case 'flutter':
-          return Icons.flutter_dash_rounded;
         case 'public':
           return Icons.public_rounded;
         case 'satellite':
